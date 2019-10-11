@@ -20,15 +20,14 @@
         <div class="search-bar">
           <!-- tab栏 -->
           <el-row type="flex" class="search-tab">
-            <span v-for="(item,index) in options"
-            :key="index">
+            <span v-for="(item,index) in options" :key="index" @click="handleTabChange(index)">
               <i>{{item.title}}</i>
             </span>
           </el-row>
 
           <!-- 输入框 -->
-          <el-row type="flex" align="middle" class="search-input" >
-            <input placeholder="请输入内容" />
+          <el-row type="flex" align="middle" class="search-input">
+            <input :placeholder="options[current].placeholder" />
             <i class="el-icon-search"></i>
           </el-row>
         </div>
@@ -46,11 +45,14 @@ export default {
       banners: [],
 
       //tab的数据结构！！！
-      options:[
-        {title:"攻略",placeholder:"搜索城市"},
-        {title:"酒店",placeholder:"请输入城市搜索酒店"},
-        {title:'机票',placeholder:""}
-      ]
+      options: [
+        { title: "攻略", placeholder: "搜索城市" },
+        { title: "酒店", placeholder: "请输入城市搜索酒店" },
+        { title: "机票", placeholder: "" }
+      ],
+
+      //tab栏的索引,把变量current用起来
+      current: 0
     };
   },
   //这个框架已经帮你做了这个事情了this.$axios
@@ -66,6 +68,17 @@ export default {
       //赋值给banners
       this.banners = data;
     });
+  },
+
+  methods: {
+    //点击tab栏时候触发
+    handleTabChange(index) {
+      this.current = index;
+
+      if(index == 2){
+       this.$router.push("/air")
+      }
+    }
   }
 };
 </script>
