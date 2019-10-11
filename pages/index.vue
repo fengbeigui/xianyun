@@ -8,7 +8,7 @@
           <div
             class="banner-image"
             :style="`
-                background:url(${item.url}) center center no-repeat;
+                background:url(${$axios.defaults.baseURL + item.url}) center center no-repeat;
                 background-size:contain contain;
                 `"
           ></div>
@@ -24,11 +24,24 @@ export default {
     data(){
       return{
         banners:[
-          {url:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1570813537098&di=fc310f318ebbf090d71d2e824325e12a&imgtype=0&src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2Fd%2F58006e488b7da.jpg'},
-          {url:'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1570803443&di=6306fb0f7a664fc181264c4f5f632fd7&src=http://pic23.nipic.com/20120823/10717094_095551546198_2.jpg'},
-          {url:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1570813537099&di=34d40ed5054997a78da88bfd49604236&imgtype=0&src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2Fa%2F580033ac9de53.jpg'}
+
         ],
       }
+    },
+    //这个框架已经帮你做了这个事情了this.$axios
+    //一级做了基准路径，直接加上后面的测试一下，这里看接口
+    mounted(){
+      this.$axios({
+        url:"/scenics/banners"
+      }).then(res=>{
+        //console.log(res);
+        //先从这里面解构出来
+        const{data} = res.data;
+
+        //赋值给banners
+        this.banners=data;
+        
+      })
     }
 };
 </script>
