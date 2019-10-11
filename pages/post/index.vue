@@ -1,6 +1,6 @@
 <template>
   <div>
-    首页
+      存放旅游攻略模块的文件夹
   </div>
 </template>
 

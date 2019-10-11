@@ -1,6 +1,6 @@
 <template>
   <div>
-    首页
+      用户登录注册页面
   </div>
 </template>
 
