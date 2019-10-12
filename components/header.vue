@@ -75,9 +75,13 @@ export default {
   methods: {
     // 用户退出
     handleLogout() {
-        //alert(123)
-        //清空用户数据
-        this.$store.commit("user/setUserInfo",{})
+      //alert(123)
+      //清空用户数据
+      this.$store.commit("user/setUserInfo", {});
+      this.$message({
+        message: "退出成功",
+        type: "success"
+      });
     }
   },
   mounted() {
