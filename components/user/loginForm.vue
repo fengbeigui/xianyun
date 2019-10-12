@@ -73,7 +73,7 @@ export default {
 
                   //通过调用mutations下的方法修改state的值，commit方法调用mutation的方法
 
-                  this.$store.commit("user/setUsername",data.user.nickname)
+                  this.$store.commit("user/setUserInfo",data)
               }
               
           }
