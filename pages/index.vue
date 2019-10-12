@@ -57,17 +57,26 @@ export default {
   },
   //这个框架已经帮你做了这个事情了this.$axios
   //一级做了基准路径，直接加上后面的测试一下，这里看接口
-  mounted() {
-    this.$axios({
-      url: "/scenics/banners"
-    }).then(res => {
-      //console.log(res);
-      //先从这里面解构出来
-      const { data } = res.data;
+  async mounted() {
+    // this.$axios({
+    //   url: "/scenics/banners"
+    // }).then(res => {
+    //   //console.log(res);
+    //   //先从这里面解构出来
+    //   const { data } = res.data;
 
-      //赋值给banners
-      this.banners = data;
+    //   //赋值给banners
+    //   this.banners = data;
+    // });
+    //返回一个pomise,res就是axios的resolve的参数(也就是。then回调函数的参数)
+    const res = await this.$axios({
+      url:"/scenics/banners",
+      desc:"美景图片",
     });
+    //解构函数
+    const {data} = res.data;
+    //把data存储到banners
+    this.banners = data;
   },
 
   methods: {
