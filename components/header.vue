@@ -74,7 +74,11 @@
 export default {
   methods: {
     // 用户退出
-    handleLogout() {}
+    handleLogout() {
+        //alert(123)
+        //清空用户数据
+        this.$store.commit("user/setUserInfo",{})
+    }
   },
   mounted() {
     console.log(this.$store.state.user.username);
