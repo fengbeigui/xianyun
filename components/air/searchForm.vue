@@ -16,13 +16,14 @@
       <el-form-item label="出发城市">
         <!-- fetch-suggestions: 类似于input方法，每次输入框值发生变化时候回触发 -->
         <!-- select：选中下拉列表中的值的时候触发的触发  -->
+        <!-- handletBlur传一个参数进来 -->
         <el-autocomplete
           :fetch-suggestions="queryDepartSearch"
           placeholder="请搜索出发城市"
           @select="handleDepartSelect"
           class="el-autocomplete"
           v-model="form.departCity"
-          @blur="handleDepartBlur"
+          @blur="handletBlur(`depart`)"
         ></el-autocomplete>
       </el-form-item>
 
@@ -31,7 +32,9 @@
           :fetch-suggestions="queryDestSearch"
           placeholder="请搜索到达城市"
           @select="handleDestSelect"
-          class="el-autocomplete"            
+          class="el-autocomplete"
+          v-model="form.destCity"
+          @blur="handletBlur(`dest`)"
         ></el-autocomplete>
       </el-form-item>
 
@@ -110,21 +113,38 @@ export default {
     },
 
     //出发城市市区焦点时候默认选中第一个
-    handleDepartBlur() {
+    //type 可能等于depart 或者dest
+    handletBlur(type) {
       //默认选中城市列表的第一个
-      if ( this.cities.length > 0) {
-        this.form.departCity = this.cities[0].value;
-        this.form.departCode = this.cities[0].sort;
-      }
+      // if (this.cities.length > 0) {
+      //   if (type === "depart") {
+      //     this.form.departCity = this.cities[0].value;
+      //     this.form.departCode = this.cities[0].sort;
+      //   }
+      //   if (type === "dest") {
+      //     this.form.destCity = this.cities[0].value;
+      //     this.form.destCode = this.cities[0].sort;
+      //   }
+      // }
+
+      if(this.cities.length === 0)return;
+
+      this.form[type + "City"] = this.cities[0].value;
+      this.form[type + "Code"] = this.cities[0].sort;
     },
+
     //目标城市输入框获得焦点时触发
     //value是选中的值，cb是回调函数，接收要展示的列表
-    queryDestSearch(value, cb) {},
+    queryDestSearch(value, cb) {
+      //value是到达城市value,cb也是到达得到输入框回调函数
+      this.queryDepartSearch(value, cb);
+    },
+
     //出发城市下拉选择时触发
     handleDepartSelect(item) {
-      //获取到表单需要机票信息
-      this.form.departCity = item.value;
-      this.form.departCode = item.sort;
+      //获取到表单需要机票信息,到达城市的定义destCity
+      this.form.destCity = item.value;
+      this.form.destCode = item.sort;
     },
     //目标城市下拉选择时触发
     handleDestSelect(item) {},
