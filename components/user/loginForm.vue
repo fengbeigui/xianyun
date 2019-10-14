@@ -52,30 +52,13 @@ export default {
           //valid是表单验证的结果
           //console.log(valid);
           if(valid){
-              //提交登录接口
-              //await的使用，必须在前面加上async
-              var res = await this.$axios({
-                  url:"/accounts/login",
-                  method:"post",
-                  data:this.form
-              })
-              //console.log(res);
+              //this.$store.dispath用于调运action的方法
+              const res = await this.$store.dispatch("user/login",this.form)
+
               if(res.status === 200){
-                  this.$message.success("登录成功");
-
-                  //先不跳转到首页 this.$router.push("/")
-
-                  const data = res.data;
-                  //把token保存到本地，在头部组件中显示用户数据
-
-                  //vuex不能通过直接赋值方式来修改state的值
-                  //this.$store.state.user.username = data.user.nickname
-
-                  //通过调用mutations下的方法修改state的值，commit方法调用mutation的方法
-
-                  this.$store.commit("user/setUserInfo",data)
+                this.$message.success("登录成功");
+                this.$router.push("/")
               }
-              
           }
           
       })
