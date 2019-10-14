@@ -42,7 +42,7 @@ export default {
       } else if (value !== this.form.password) {
         callback(new Error("两次输入密码不一致!"));
       } else {
-          //验证通过
+        //验证通过
         callback();
       }
     };
@@ -73,53 +73,52 @@ export default {
   methods: {
     // 发送验证码
     async handleSendCaptcha() {
+      if (!this.form.username) {
+        this.$message.error("手机号码不能为空");
+        return;
+      }
+      //调用actions的方法
+      const res = await this.$store.dispatch(
+        "user/sendCaptcha",
+        this.form.username
+      );
 
-        if(!this.form.username){
-            this.$message.error("手机号码不能为空");
-            return;
-        }
-        const res = await this.$axios({
-            url:"/captchas",
-            //post请求，拿的参数必须是tel
-            method:"post",
-            data:{
-                tel:this.form.username  //手机号码
-            }
-        })
-            //console.log(res);
-            const {code} = res.data;
-            //打印出手机的验证码
-            this.$message.success(`当前的手机验证码是:${code}`);
+      //console.log(res);
+      const { code } = res.data;
+      //打印出手机的验证码
+      this.$message.success(`当前的手机验证码是:${code}`);
     },
 
     // 注册 把它修饰一下async
     handleRegSubmit() {
-     // console.log(this.form);
-     this.$refs.form.validate(async valid =>{
-         if(valid){
-             //请求注册的接口
-             //props是form里面除了chenckPassworkd以外的属性
-             const {checkPassword, ...props} = this.form
+      // console.log(this.form);
+      this.$refs.form.validate(async valid => {
+        if (valid) {
+          //请求注册的接口
+          //props是form里面除了chenckPassworkd以外的属性
+          const { checkPassword, ...props } = this.form;
 
-             //请求注册的接口
-             const res = await this.$axios({
-                 url:"/accounts/register",
-                 method:"post",
-                 data:props
-             })
-             //console.log(res);
-             if(res.status === 200){
-                 this.$message.success("注册成功");
-                 //跳转到首页
-                 this.$router.push("/")
+          //请求注册的接口
+          const res = await this.$axios({
+            url: "/accounts/register",
+            method: "post",
+            data: props,
+            header: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            }
+          });
+          //console.log(res);
+          if (res.status === 200) {
+            this.$message.success("注册成功");
+            //跳转到首页
+            this.$router.push("/");
 
-                 const data = res.data;
+            const data = res.data;
 
-                 this.$store.commit("user/setUserInfo",data);
-             }
-             
-         }
-     })
+            this.$store.commit("user/setUserInfo", data);
+          }
+        }
+      });
     }
   }
 };

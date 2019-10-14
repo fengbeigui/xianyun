@@ -85,7 +85,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$store.state.user.username);
+    console.log(this.$store.state);
   }
 };
 </script>
