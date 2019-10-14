@@ -78,8 +78,12 @@ export default {
     //cb:回调函数，必须要调用，调用时候必须要传递一个数组的参数，
     //数组中的元素必须是一个对象，对象中必须要有value属性
     queryDepartSearch(value, cb) {
-      //请求搜索建议城市
-      if(!value) return;
+      //输入框为空时候不请求
+      if(!value) {
+        //不显示下拉框
+        cb([]);
+        return;
+      };
 
       //请求搜索建议城市
       this.$axios({
@@ -98,9 +102,15 @@ export default {
     },
     //目标城市输入框获得焦点时触发
     //value是选中的值，cb是回调函数，接收要展示的列表
-    queryDestSearch(value, cb) {},
+    queryDestSearch(value, cb) {
+
+    },
     //出发城市下拉选择时触发
-    handleDepartSelect(item) {},
+    handleDepartSelect(item) {
+      //获取到表单需要机票信息
+      this.form.departCity = item.value;
+      this.form.departCode = item.sort;
+    },
     //目标城市下拉选择时触发
     handleDestSelect(item) {},
     //确实选择日期时触发
@@ -108,7 +118,9 @@ export default {
     //触发和目标城市切换时触发
     handleReverse() {},
     //提交表单时触发
-    handleSubmit() {}
+    handleSubmit() {
+      console.info(this.form)
+    }
   },
   mounted() {}
 };
