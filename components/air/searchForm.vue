@@ -22,6 +22,7 @@
           @select="handleDepartSelect"
           class="el-autocomplete"
           v-model="form.departCity"
+          @blur="handleDepartBlur"
         ></el-autocomplete>
       </el-form-item>
 
@@ -30,7 +31,7 @@
           :fetch-suggestions="queryDestSearch"
           placeholder="请搜索到达城市"
           @select="handleDestSelect"
-          class="el-autocomplete"
+          class="el-autocomplete"            
         ></el-autocomplete>
       </el-form-item>
 
@@ -66,7 +67,10 @@ export default {
         destCity: "", //到达城市
         destCode: "", //到达城市代码
         departDate: "" //日期字符串
-      }
+      },
+
+      //存放newData的城市的数组
+      cities: []
     };
   },
 
@@ -79,32 +83,43 @@ export default {
     //数组中的元素必须是一个对象，对象中必须要有value属性
     queryDepartSearch(value, cb) {
       //输入框为空时候不请求
-      if(!value) {
+      if (!value) {
         //不显示下拉框
         cb([]);
         return;
-      };
+      }
 
       //请求搜索建议城市
       this.$axios({
-        url:"/airs/city?name=" + value
-      }).then(res=>{
+        url: "/airs/city?name=" + value
+      }).then(res => {
         //data 是后台返回的城市数组，没有value属性
-        const {data} = res.data;
+        const { data } = res.data;
         //循环给每一项添加value属性
-        const newData = data.map(v =>{
-          v.value = v.name.replace("市","");//把后面的市替换成空格
+        const newData = data.map(v => {
+          v.value = v.name.replace("市", ""); //把后面的市替换成空格
           return v;
-        })
+        });
+        //console.log(newData);
+        //newData赋值给data中cities
+        this.cities = newData;
+
         //展示到下拉列表
-        cb(newData)
-      })
+        cb(newData);
+      });
+    },
+
+    //出发城市市区焦点时候默认选中第一个
+    handleDepartBlur() {
+      //默认选中城市列表的第一个
+      if ( this.cities.length > 0) {
+        this.form.departCity = this.cities[0].value;
+        this.form.departCode = this.cities[0].sort;
+      }
     },
     //目标城市输入框获得焦点时触发
     //value是选中的值，cb是回调函数，接收要展示的列表
-    queryDestSearch(value, cb) {
-
-    },
+    queryDestSearch(value, cb) {},
     //出发城市下拉选择时触发
     handleDepartSelect(item) {
       //获取到表单需要机票信息
@@ -119,7 +134,7 @@ export default {
     handleReverse() {},
     //提交表单时触发
     handleSubmit() {
-      console.info(this.form)
+      console.info(this.form);
     }
   },
   mounted() {}
