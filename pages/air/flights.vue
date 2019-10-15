@@ -11,11 +11,18 @@
 
         <!-- 航班信息 -->
         <!--  flightsData.flights是航班的列表 -->
-        <FlightsItem 
-        v-for="(item,index) in flightsData.flights"
-        :key="index"
-        :item="item"/>
+        <FlightsItem v-for="(item,index) in flightsData.flights" :key="index" :item="item" />
 
+        <!-- 分页 element找模板 -->
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pageIndex"
+          :page-sizes="[5, 10, 15, 20]"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="flightsData.total"
+        ></el-pagination>
       </div>
 
       <!-- 侧边栏 -->
@@ -33,25 +40,41 @@ import FlightsItem from "@/components/air/flightsItem";
 export default {
   data() {
     return {
-        //请求机票列表返回的总数据，包含了flights,info,options,total
-        flightsData:{}
+      //请求机票列表返回的总数据，包含了flights,info,options,total
+      flightsData: {},
+
+      //当前的页数
+      pageIndex:1,
+      //当前的条数
+      pageSize:5,
     };
+  },
+  methods:{
+      //分页条数切换时候触发，val是当前的条数
+      handleSizeChange(val){
+
+      },
+      //页数切换时候触发，val是当前的页数
+      handleCurrentChange(val){
+
+      }
   },
 
   components: {
     FlightsListHead,
     FlightsItem
   },
+
   mounted() {
     //请求机票列表数据
     this.$axios({
-        url:'/airs',
-        //params是axios的get参数
-        params:this.$route.query
-    }).then(res=>{
-        //保存到机票的总数据
-        this.flightsData = res.data;
-    })
+      url: "/airs",
+      //params是axios的get参数
+      params: this.$route.query
+    }).then(res => {
+      //保存到机票的总数据
+      this.flightsData = res.data;
+    });
   }
 };
 </script>
