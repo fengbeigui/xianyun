@@ -15,6 +15,7 @@
 
         <!-- 分页 element找模板 -->
         <el-pagination
+          v-if="flightsData.flights.length"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="pageIndex"
@@ -23,6 +24,14 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="flightsData.total"
         ></el-pagination>
+
+        <!-- loading等于false表示加载完毕之后才显示 -->
+      <!--   Loading = false  取反  可以写成  !loading -->
+        <div
+          v-if="flightsData.flights.length === 0 && !loading"
+          style="padding: 50px; text-align:center"
+        >该航班暂无数据</div>
+
       </div>
 
       <!-- 侧边栏 -->
@@ -49,7 +58,9 @@ export default {
       //当前的页数
       pageIndex: 1,
       //当前的条数
-      pageSize: 5
+      pageSize: 5,
+      //判断是否正在加载
+      loading:true,
     };
   },
   methods: {
@@ -57,13 +68,11 @@ export default {
     handleSizeChange(val) {
       //切换条数
       this.pageSize = val;
-
     },
     //页数切换时候触发，val是当前的页数
     handleCurrentChange(val) {
       //修改当前的页数
       this.pageIndex = val;
-
     }
   },
 
@@ -76,8 +85,8 @@ export default {
     //从flights总列表数据中切割出来数组列表
     dataList() {
       const arr = this.flightsData.flights.slice(
-          (this.pageIndex -1)* this.pageSize,
-          this.pageIndex * this.pageSize
+        (this.pageIndex - 1) * this.pageSize,
+        this.pageIndex * this.pageSize
       );
       return arr;
     }
@@ -91,8 +100,8 @@ export default {
     }).then(res => {
       //保存到机票的总数据
       this.flightsData = res.data;
-
-
+      //请求完毕
+      this.loading = false;
     });
   }
 };
