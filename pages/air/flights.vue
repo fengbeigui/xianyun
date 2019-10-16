@@ -4,7 +4,7 @@
       <!-- 顶部过滤列表 -->
       <div class="flights-content">
         <!-- 过滤条件 -->
-        <FlightsFilters :data="flightsData" @setDataList="setDataList"/>
+        <FlightsFilters :data="cacheFlightsData" @setDataList="setDataList" />
 
         <!-- 航班头部布局 -->
         <FlightsListHead />
@@ -26,12 +26,11 @@
         ></el-pagination>
 
         <!-- loading等于false表示加载完毕之后才显示 -->
-      <!--   Loading = false  取反  可以写成  !loading -->
+        <!--   Loading = false  取反  可以写成  !loading -->
         <div
           v-if="flightsData.flights.length === 0 && !loading"
           style="padding: 50px; text-align:center"
         >该航班暂无数据</div>
-
       </div>
 
       <!-- 侧边栏 -->
@@ -45,7 +44,7 @@
   <script>
 import FlightsListHead from "@/components/air/flightsListHead";
 import FlightsItem from "@/components/air/flightsItem";
-import FlightsFilters from "@/components/air/flightsFilters.vue"
+import FlightsFilters from "@/components/air/flightsFilters.vue";
 
 export default {
   data() {
@@ -54,8 +53,15 @@ export default {
       flightsData: {
         //初始值
         flights: [],
-        info:{},
-        options:{}
+        info: {},
+        options: {}
+      },
+      //再声明一份总数据,该总数据一旦赋值之后不会再被修改，也就是第一次赋值完后的值等于flightsData
+      cacheFlightsData: {
+        //初始值
+        flights: [],
+        info: {},
+        options: {}
       },
 
       //当前的页数
@@ -63,12 +69,12 @@ export default {
       //当前的条数
       pageSize: 5,
       //判断是否正在加载
-      loading:true,
+      loading: true
     };
   },
   methods: {
     //给过滤组件修改flightsData的flights
-    setDataList(arr){
+    setDataList(arr) {
       this.flightsData.flights = arr;
     },
     //分页条数切换时候触发，val是当前的条数
@@ -107,7 +113,9 @@ export default {
       params: this.$route.query
     }).then(res => {
       //保存到机票的总数据
-      this.flightsData = res.data;
+        this.flightsData = res.data;
+      // 赋值多一分给缓存的对象,一旦赋值之后不能再被修改
+      this.cacheFlightsData ={...res.data} ;
       //请求完毕
       this.loading = false;
     });
