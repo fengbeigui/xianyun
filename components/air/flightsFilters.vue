@@ -86,6 +86,12 @@ export default {
     // 选择机场时候触发
     handleAirport(value) {
       //console.log(value);
+      //根据value过滤列表，只保留当前符合条件的机票列表
+      const arr = this.data.flights.filter(v=>{
+        return v.org_airport_name === value;
+      })
+      //修改列表数据的
+      this.$emit("setDataList",arr)
     },
 
     // 选择出发时间时候触发
@@ -102,7 +108,7 @@ export default {
       })
       //修改列表数据的
       this.$emit("setDataList",arr);
-      
+
     },
 
     // 选择机型时候触发
