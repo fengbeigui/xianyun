@@ -11,14 +11,14 @@
           <el-row type="flex" justify="space-between" class="flight-info-center">
             <el-col :span="8" class="flight-airport">
               <strong>{{item.dep_time}}</strong>
-              <span>{{item.org_airport_name}}{{item.org_airport_quay}}</span>
+              <span>{{item.org_airport_name}} {{item.org_airport_quay}}</span>
             </el-col>
             <el-col :span="8" class="flight-time">
               <span>{{rankTime}}</span>
             </el-col>
             <el-col :span="8" class="flight-airport">
               <strong>{{item.arr_time}}</strong>
-              <span>{{item.dest_airport_name}}{{item.dst_airport_quay}}</span>
+              <span>{{item.dst_airport_name}} {{item.dst_airport_quay}}</span>
             </el-col>
           </el-row>
         </el-col>
@@ -28,6 +28,7 @@
         </el-col>
       </el-row>
     </div>
+
     <div class="flight-recommend" v-if="isShow">
       <!-- 隐藏的座位信息列表 -->
       <el-row type="flex" justify="space-between" align="middle" class="flight-sell">
@@ -39,7 +40,7 @@
             justify="space-between"
             align="middle"
             class="flight-sell"
-            v-for="(seat,index) in item.seat_infs"
+            v-for="(seat, index) in item.seat_infos"
             :key="index"
           >
             <el-col :span="16" class="flight-sell-left">
@@ -60,12 +61,12 @@
 
   <script>
 export default {
-    data(){
-        return{
-            //是否展开座位列表信息
-            isShow:false
-        }
-    },
+  data() {
+    return {
+      //是否展开座位列表信息
+      isShow: false
+    };
+  },
   //计算属性，监听组件内容引用的实例的属性的变化
   computed: {
     rankTime() {
@@ -73,18 +74,18 @@ export default {
       const depTime = this.item.dep_time.split(":"); // 12: 30 = [12, 30]
 
       //第二天
-      if(arrTime[0]<depTime[0]){
-          arrTime[0] += 24;
+      if (arrTime[0] < depTime[0]) {
+        arrTime[0] += 24;
       }
       //到达时间的分钟
-      const end = arrTime[0]*60+(+arrTime[1]);
+      const end = arrTime[0] * 60 + +arrTime[1];
       //出发时间的分钟
-      const start = depTime[0]*60+(+depTime[1]);
+      const start = depTime[0] * 60 + +depTime[1];
       //相隔的分钟
       const dis = end - start;
 
       //小时
-      const hours = Math.floor(dis/60);
+      const hours = Math.floor(dis / 60);
       //分钟
       const min = dis % 60;
 
