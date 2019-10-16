@@ -4,9 +4,9 @@
       <!-- 左侧信息 -->
       <el-col :span="8">
         单程：
-        广州 - 上海
+        {{data.info.departCity}} - {{data.info.destCity}}
         /
-        2019-06-17
+        {{data.info.departDate}}
       </el-col>
 
       <!-- 过滤条件的列表 -->
@@ -50,10 +50,17 @@ export default {
       airSize: "" // 机型大小
     };
   },
+  props:{
+    //组件可以接收总数据
+    data:{
+      type:Object,
+      default:{}
+    }
+  },
   methods: {
     // 选择机场时候触发
     handleAirport(value) {
-      console.log(value);
+      //console.log(value);
     },
 
     // 选择出发时间时候触发

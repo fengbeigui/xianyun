@@ -31,7 +31,7 @@
 
     <div class="flight-recommend" v-if="isShow">
       <!-- 隐藏的座位信息列表 -->
-      <el-row type="flex" justify="space-between" align="middle" class="flight-sell">
+      <el-row type="flex" justify="space-between" align="middle">
         <el-col :span="4">低价推荐</el-col>
         <el-col :span="20">
           <!-- 需要循环显示的座位信息 -->
