@@ -54,7 +54,8 @@ export default {
       flightsData: {
         //初始值
         flights: [],
-        info:{}
+        info:{},
+        options:{}
       },
 
       //当前的页数
