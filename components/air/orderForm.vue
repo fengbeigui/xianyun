@@ -33,8 +33,12 @@
     <div class="air-column">
       <h2>保险</h2>
       <div>
-        <div class="insurance-item">
-          <el-checkbox label="航空意外险：￥30/份×1  最高赔付260万" border></el-checkbox>
+        <div class="insurance-item" v-for="(item,index) in detail.insurances" :key="index">
+          <el-checkbox
+            :label="`${item.type}：￥${item.price}/份×1  最高赔付${item.compensation}`"
+            border
+            @change="handleChange(item.id)"
+          ></el-checkbox>
         </div>
       </div>
     </div>
@@ -69,12 +73,17 @@
 export default {
   data() {
     return {
+      //机票详情
+      detail: {},
+      //用户列表
       users: [
         {
           username: "",
           id: ""
         }
-      ]
+      ],
+      //保险id的集合
+      insurances:[]
     };
   },
 
@@ -91,6 +100,22 @@ export default {
     // 移除乘机人
     handleDeleteUser(index) {
       this.users.splice(index, 1);
+    },
+    //选择保险的时候触发
+    handleChange(id) {
+      //id就是保险的id
+      //需要判断保险数组中是否存在，如果存在需要删除，不存在就添加
+      const index = this.insurances.indexOf(id);
+        if(index > -1){
+            //判断大于-1的时候说明有值，已经存在
+            this.insurances.splice(index,1);
+
+        }else{
+            //否则没有存在
+            this.insurances.push(id);
+        }
+        console.log(this.insurances);
+        
     },
 
     // 发送手机验证码
@@ -111,7 +136,9 @@ export default {
         seat_xid
       }
     }).then(res => {
-      console.log(res);
+      //console.log(res);
+      //保存详情到data
+      this.detail = res.data;
     });
   }
 };
