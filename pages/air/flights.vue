@@ -36,6 +36,7 @@
       <!-- 侧边栏 -->
       <div class="aside">
         <!-- 侧边栏组件 -->
+        <FlightsAside />
       </div>
     </el-row>
   </section>
@@ -45,6 +46,7 @@
 import FlightsListHead from "@/components/air/flightsListHead";
 import FlightsItem from "@/components/air/flightsItem";
 import FlightsFilters from "@/components/air/flightsFilters.vue";
+import FlightsAside from "@/components/air/flightsAside.vue";
 
 export default {
   data() {
@@ -71,7 +73,7 @@ export default {
       //判断是否正在加载
       loading: true,
       //分页数
-      total:0
+      total: 0
     };
   },
   methods: {
@@ -92,13 +94,43 @@ export default {
     handleCurrentChange(val) {
       //修改当前的页数
       this.pageIndex = val;
+    },
+    //获取机票的列表，由于下面请求重复这里封装再调用
+    getList(){
+      //请求机票列表数据
+      this.$axios({
+        url:"/airs",
+        //params是axios的get的参数
+        params:this.$route.query
+      }).then(res=>{
+        //保存机票的总数据
+        this.flightsData = res.data;
+
+        //赋值多一分给缓存的对象，一旦赋值之后不能再被修改
+        this.cacheFlightsData = {...res.data}
+
+        //请求完毕
+        this.loading = false;
+
+        //分页总数
+        this.total = this.flightsData.total;
+      })
     }
   },
-
+  //监听
+  watch:{
+    //监听路由
+    $route(){
+      //请求机票列表数据
+      this.getList()
+    }
+  },
+  //注册组件
   components: {
     FlightsListHead,
     FlightsItem,
-    FlightsFilters
+    FlightsFilters,
+    FlightsAside
   },
   //计算
   computed: {
@@ -113,21 +145,7 @@ export default {
   },
   mounted() {
     //请求机票列表数据
-    this.$axios({
-      url: "/airs",
-      //params是axios的get参数
-      params: this.$route.query
-    }).then(res => {
-      //保存到机票的总数据
-        this.flightsData = res.data;
-      // 赋值多一分给缓存的对象,一旦赋值之后不能再被修改
-      this.cacheFlightsData ={...res.data} ;
-      //请求完毕
-      this.loading = false;
-
-      //分页总数
-      this.total = this.flightsData.total;
-    });
+      this.getList()
   }
 };
 </script>
