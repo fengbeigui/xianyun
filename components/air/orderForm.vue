@@ -48,11 +48,11 @@
       <div class="contact">
         <el-form label-width="60px">
           <el-form-item label="姓名">
-            <el-input></el-input>
+            <el-input v-model="contactName"></el-input>
           </el-form-item>
 
           <el-form-item label="手机">
-            <el-input placeholder="请输入内容">
+            <el-input placeholder="请输入内容" v-model="contactPhone">
               <template slot="append">
                 <el-button @click="handleSendCaptcha">发送验证码</el-button>
               </template>
@@ -60,7 +60,7 @@
           </el-form-item>
 
           <el-form-item label="验证码">
-            <el-input></el-input>
+            <el-input v-model="captcha"></el-input>
           </el-form-item>
         </el-form>
         <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
@@ -83,7 +83,11 @@ export default {
         }
       ],
       //保险id的集合
-      insurances:[]
+      insurances: [],
+      contactName: "", //联系人
+      contactPhone: "", //联系电话
+      captcha: "", //验证码
+      invoice: false //发票，写死
     };
   },
 
@@ -106,16 +110,14 @@ export default {
       //id就是保险的id
       //需要判断保险数组中是否存在，如果存在需要删除，不存在就添加
       const index = this.insurances.indexOf(id);
-        if(index > -1){
-            //判断大于-1的时候说明有值，已经存在
-            this.insurances.splice(index,1);
-
-        }else{
-            //否则没有存在
-            this.insurances.push(id);
-        }
-        console.log(this.insurances);
-        
+      if (index > -1) {
+        //判断大于-1的时候说明有值，已经存在
+        this.insurances.splice(index, 1);
+      } else {
+        //否则没有存在
+        this.insurances.push(id);
+      }
+      console.log(this.insurances);
     },
 
     // 发送手机验证码
@@ -123,7 +125,18 @@ export default {
 
     // 提交订单
     handleSubmit() {
-      console.log(this.users);
+      //console.log(this.users);
+      const data = {
+        users: this.users,
+        insurances: this.insurances,
+        contactName:this.contactName,
+        contactPhone: this.contactPhone,
+        captcha: this.captcha,
+        invoice: this.invoice,
+        seat_xid: this.$route.query.seat_xid,
+        air: this.$route.query.id,
+      };
+      console.log(data);
     }
   },
 
