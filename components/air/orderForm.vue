@@ -156,13 +156,16 @@ export default {
       };
       //提交订单接口
       this.$axios({
-          url:"/airorders",
-          method:"post",
-          data
-      }).then(res=>{
-          console.log(res);
-          
-      })
+        url: "/airorders",
+        method: "post",
+        data,
+        headers: {
+          // 这是jwt标准的token
+          Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
+        }
+      }).then(res => {
+        console.log(res);
+      });
     }
   },
 
