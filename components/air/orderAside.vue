@@ -57,8 +57,8 @@ export default {
     },
     //总价格定义
     allPrice:{
-        type:Number,
-        default:0
+        type: Number,
+        default: 0
     }
   },
   // 计算属性，监听组件内容引用的实例的属性的变化

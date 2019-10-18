@@ -97,10 +97,25 @@ export default {
     //计算总价格
     allPrice() {
       //把总价格传递给父组件
-      //这里面做计算，这里先写死个固定值2
-      this.$emit("getAllPrice",2);
 
-      return 2;
+      //如果接口还没有请求回来，直接返回,seat_infos注意别打错了，否则价格为零找半天
+      if (!this.detail.seat_infos) return;
+
+      //总价格初始值
+      let price = 0;
+      //加上单价
+      price += this.detail.seat_infos.org_settle_price;
+      //燃油费
+      price += this.detail.airport_tax_audlet;
+      //保险
+      price += this.insurances.length * 30
+      //人数
+      price *= this.users.length;
+
+      //把总价格传递给父组件
+      this.$emit("getAllPrice", price);
+
+      return price;
     }
   },
 
