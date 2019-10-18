@@ -87,7 +87,10 @@ export default {
     }, 10);
   },
 
-    
+  // 组件销毁时候使用的，一般情况下用于清除定时器,离开支付页面时终止刷新
+  destroyed() {
+    clearInterval(this.timer);
+  }
 };
 </script>
 
