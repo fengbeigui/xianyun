@@ -9,8 +9,9 @@
         <h4>微信支付</h4>
         <el-row type="flex" justify="space-between" align="middle" class="pay-qrcode">
           <div class="qrcode">
-            <!-- 二维码 -->
+            <!-- 二维码 canvas H5的新标签-->
             <canvas id="qrcode-stage"></canvas>
+
             <p>请使用微信扫一扫</p>
             <p>扫描二维码支付</p>
           </div>
@@ -24,6 +25,9 @@
 </template>
 
 <script>
+// 生成二维码的包
+import QRCode from "qrcode";
+
 export default {
   data() {
     return {
@@ -47,6 +51,12 @@ export default {
       }).then(res => {
         // console.log(res);
         this.order = res.data;
+
+        //获取canvas元素
+        const canvas = document.querySelector("#qrcode-stage");
+        QRCode.toCanvas(canvas, this.order.payInfo.code_url, {
+          width: 250
+        });
       });
     }, 10);
   }
