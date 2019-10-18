@@ -32,7 +32,9 @@ export default {
   data() {
     return {
       //声明订单详情的对象
-      order: {}
+      order: {},
+      //定时器
+      timer: null
     };
   },
   mounted() {
@@ -41,25 +43,51 @@ export default {
 
     //发现拿不到token的原因,导致问题是加载需要时间
     // 等待本地的插件把本地存储的值赋给store之后再执行请求，才可以拿到token,价格定时器解决
-    setTimeout(() => {
+    setTimeout(async () => {
       //请求订单详情
-      this.$axios({
+      const res = await this.$axios({
         url: "/airorders/" + id,
         headers: {
           Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
         }
-      }).then(res => {
-        // console.log(res);
-        this.order = res.data;
-
-        //获取canvas元素
-        const canvas = document.querySelector("#qrcode-stage");
-        QRCode.toCanvas(canvas, this.order.payInfo.code_url, {
-          width: 250
-        });
       });
+      // console.log(res);
+      this.order = res.data;
+
+      //获取canvas元素
+      const canvas = document.querySelector("#qrcode-stage");
+      QRCode.toCanvas(canvas, this.order.payInfo.code_url, {
+        width: 250
+      });
+
+      //查询付款状态
+      this.timer = setInterval(async () => {
+        const res = await this.$axios({
+          //查看接口文档
+          url: "/airorders/checkpay",
+          method: "post",
+          headers: {
+            Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
+          },
+          data: {
+            id: this.$route.query.id,
+            nonce_str: this.order.price,
+            out_trade_no: this.order.orderNo
+          }
+        });
+
+        //获取支付状态
+        const { statusTxt } = res.data;
+        //支付完成之后判断
+        if (statusTxt == "支付完成") {
+          this.$message.success(statusTxt);
+          clearInterval(this.timer);
+        }
+      }, 3000);
     }, 10);
-  }
+  },
+
+    
 };
 </script>
 
