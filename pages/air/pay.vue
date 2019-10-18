@@ -35,16 +35,20 @@ export default {
     //订单id
     const { id } = this.$route.query;
 
-    //请求订单详情
-    this.$axios({
-      url: "/airorders/" + id,
-      headers: {
-        Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
-      }
-    }).then(res => {
-      // console.log(res);
-      this.order = res.data;
-    });
+    //发现拿不到token的原因,导致问题是加载需要时间
+    // 等待本地的插件把本地存储的值赋给store之后再执行请求，才可以拿到token,价格定时器解决
+    setTimeout(() => {
+      //请求订单详情
+      this.$axios({
+        url: "/airorders/" + id,
+        headers: {
+          Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
+        }
+      }).then(res => {
+        // console.log(res);
+        this.order = res.data;
+      });
+    }, 10);
   }
 };
 </script>
