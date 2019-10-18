@@ -39,7 +39,7 @@
     </el-row>
     <el-row type="flex" justify="space-between" align="middle" class="info-bar">
       <span>应付总额：</span>
-      <span class="price">￥</span>
+      <span class="price">￥{{allPrice}}</span>
     </el-row>
   </div>
 </template>
@@ -54,6 +54,11 @@ export default {
     data: {
       type: Object,
       default: {}
+    },
+    //总价格定义
+    allPrice:{
+        type:Number,
+        default:0
     }
   },
   // 计算属性，监听组件内容引用的实例的属性的变化

@@ -2,36 +2,42 @@
   <div class="container">
     <el-row type="flex" justify="space-between">
       <!-- 订单表单 事件传值-->
-      <OrderForm @getDetail="getDetail"/>
+      <OrderForm @getDetail="getDetail" @getAllPrice="getAllPrice" />
 
       <!-- 侧边栏 事件传值-->
-      <OrderAside :data="detail"/>
-      
+      <OrderAside :data="detail" :allPrice="allPrice" />
     </el-row>
   </div>
 </template>
 <script>
 //导入子组件
 import OrderForm from "@/components/air/orderForm";
-import OrderAside from "@/components/air/orderAside"
+import OrderAside from "@/components/air/orderAside";
 
 export default {
-  data(){
-      return{
-        detail:{
-          //默认值
-          seat_infos:{}
-        }
-      }
+  data() {
+    return {
+      //机票详情
+      detail: {
+        //默认值
+        seat_infos: {}
+      },
+      //总价格
+      allPrice: 0
+    };
   },
   components: {
     OrderForm,
     OrderAside
   },
-  methods:{
+  methods: {
     //获取机票详情的方法
-    getDetail(detail){
+    getDetail(detail) {
       this.detail = detail;
+    },
+    //获取总价格
+    getAllPrice(price) {
+      this.allPrice = price;
     }
   }
 };
