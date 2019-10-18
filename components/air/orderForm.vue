@@ -181,6 +181,9 @@ export default {
       //console.log(res);
       //保存详情到data
       this.detail = res.data;
+
+      //把detail返回给父组件order
+      this.$emit("getDetail",this.detail)
     });
   }
 };
